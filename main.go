@@ -20,4 +20,9 @@ func main() {
 		fmt.Println(verinfo())
 		return
 	}
+	if len(flag.Args()) == 0 {
+		fmt.Println("ERROR: markdown file not provided")
+		os.Exit(1)
+	}
+	//TODO...
 }
