@@ -1,0 +1,101 @@
+<html>
+  <head>
+    <title>Markdown Viewer</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=0"
+    />
+    <link rel="stylesheet" href="bootstrap.min.css" />
+    <script src="bootstrap.bundle.min.js"></script>
+    <style>
+      .md h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 20 0 25 0;
+      }
+      .md h2 {
+        font-size: 22px;
+        font-weight: bold;
+        margin: 15 0 20 0;
+      }
+      .md h3 {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 15 0 20 0;
+      }
+      .md h4 {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 10 0 15 0;
+      }
+      .md h5 {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 10 0 15 0;
+      }
+      .md h6 {
+        font-size: 14px;
+        font-weight: bold;
+        margin: 10 0 15 0;
+      }
+      .md p {
+        font-size: 14px;
+        margin: 10 0 15 0;
+      }
+      .md li {
+        font-size: 14px;
+      }
+      .md table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+        border-collapse: collapse;
+      }
+      .md table th {
+        font-size: 14px;
+        padding: 0.6rem;
+        border-top: 1px solid #dee2e6;
+      }
+      .md table td {
+        font-size: 14px;
+        padding: 0.6rem;
+        border-top: 1px solid #dee2e6;
+      }
+      .md pre {
+        background: #eeeeee;
+        padding: 10;
+      }
+      .md blockquote {
+        border-left: 0.25em solid #dfe2e5;
+        color: #6a737d;
+        padding: 0 0.5em;
+      }
+      .md ol,
+      .md ul {
+        padding-inline-start: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" style="padding-top: 15px">
+      <div class="md"></div>
+    </div>
+  </body>
+  <script>
+    var ready = callback => {
+      if (document.readyState != "loading") callback();
+      else document.addEventListener("DOMContentLoaded", callback);
+    };
+    ready(() => {
+      fetch("/render")
+        .then(response => response.text())
+        .then(data => {
+          document.querySelector(".md").innerHTML = data;
+        })
+        .catch(error => {
+          console.log("error:", error);
+        });
+    });
+  </script>
+</html>
