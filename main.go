@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net"
+	"net/http"
 	"os"
 	"path/filepath"
 )
@@ -24,5 +26,13 @@ func main() {
 		fmt.Println("ERROR: markdown file not provided")
 		os.Exit(1)
 	}
-	//TODO...
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("HELLO WORLD"))
+	})
+	ln, err := net.Listen("tcp", ":0")
+	assert(err)
+	port := ln.Addr().(*net.TCPAddr).Port
+	fmt.Println("Using port:", port)
+	go open(fmt.Sprintf("http://127.0.0.1:%d/", port))
+	panic(http.Serve(ln, nil))
 }
