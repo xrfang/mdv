@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 //go:embed resources/*
@@ -90,6 +91,15 @@ func main() {
 	port := ln.Addr().(*net.TCPAddr).Port
 	url := fmt.Sprintf("http://127.0.0.1:%d/", port)
 	fmt.Println("showing document at:", url)
-	go open(url)
+	go func() {
+		open(url)
+		fmt.Print("quit local server after 9 seconds")
+		for i := 0; i < 9; i++ {
+			time.Sleep(time.Second)
+			fmt.Print(".")
+		}
+		fmt.Println(" bye")
+		os.Exit(0)
+	}()
 	panic(http.Serve(ln, nil))
 }
