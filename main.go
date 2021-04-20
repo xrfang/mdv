@@ -35,9 +35,22 @@ func main() {
 		fmt.Println("ERROR: markdown file not provided")
 		os.Exit(1)
 	}
+	root, _ := fs.Sub(res, "resources")
+	defcss := filepath.Join(cf.dir, "default.css")
+	_, err := os.Stat(defcss)
+	if err != nil {
+		func() {
+			w, err := os.Create(defcss)
+			assert(err)
+			defer func() { assert(w.Close()) }()
+			f, _ := root.Open(filepath.Join(".", "default.css"))
+			defer f.Close()
+			_, err = io.Copy(w, f)
+			assert(err)
+		}()
+	}
 	fn := flag.Arg(0)
 	dir := filepath.Dir(fn)
-	root, _ := fs.Sub(res, "resources")
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if e := recover(); e != nil {
@@ -53,6 +66,14 @@ func main() {
 			w.Header().Set("Content-Type", "text/html")
 		case ".css":
 			w.Header().Set("Content-Type", "text/css")
+			if r.URL.Path == "/mdv.css" {
+				f, err := os.Open(filepath.Join(cf.dir, cf.CSS))
+				assert(err)
+				defer f.Close()
+				_, err = io.Copy(w, f)
+				assert(err)
+				return
+			}
 		case ".js":
 			w.Header().Set("Content-Type", "text/javascript")
 		case ".jpg", ".jpeg":
@@ -102,13 +123,15 @@ func main() {
 	fmt.Println("showing document at:", url)
 	go func() {
 		open(url)
-		fmt.Print("quit local server after 9 seconds")
-		for i := 0; i < 9; i++ {
-			time.Sleep(time.Second)
-			fmt.Print(".")
+		if cf.Quit > 0 {
+			fmt.Printf("quit local server after %d seconds", cf.Quit)
+			for i := 0; i < cf.Quit; i++ {
+				time.Sleep(time.Second)
+				fmt.Print(".")
+			}
+			fmt.Println(" bye")
+			os.Exit(0)
 		}
-		fmt.Println(" bye")
-		os.Exit(0)
 	}()
 	panic(http.Serve(ln, nil))
 }
