@@ -7,6 +7,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=0"
     />
     <link rel="stylesheet" href="bootstrap.min.css" />
+    <script src="polyfill.min.js"></script>
     <script src="bootstrap.bundle.min.js"></script>
     <style>
       .md h1 {
@@ -42,6 +43,7 @@
       .md p {
         font-size: 14px;
         margin: 10 0 15 0;
+        text-align: justify;
       }
       .md li {
         font-size: 14px;
@@ -83,6 +85,17 @@
     </div>
   </body>
   <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [
+          ["$", "$"],
+          ["\\(", "\\)"],
+        ],
+      },
+      svg: {
+        fontCache: "global",
+      },
+    };
     var ready = callback => {
       if (document.readyState != "loading") callback();
       else document.addEventListener("DOMContentLoaded", callback);
@@ -92,6 +105,10 @@
         .then(response => response.text())
         .then(data => {
           document.querySelector(".md").innerHTML = data;
+          var mjx = document.createElement("script");
+          mjx.src = "mathjax.js";
+          mjx.async = true;
+          document.head.appendChild(mjx);
         })
         .catch(error => {
           console.log("error:", error);

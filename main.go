@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 //go:embed resources/*
@@ -41,6 +42,24 @@ func main() {
 				http.Error(w, trace("%v", e).Error(), http.StatusInternalServerError)
 			}
 		}()
+		if strings.HasSuffix(r.URL.Path, "/") {
+			http.Redirect(w, r, "/index.html", http.StatusTemporaryRedirect)
+			return
+		}
+		switch strings.ToLower(filepath.Ext(r.URL.Path)) {
+		case ".html", ".htm":
+			w.Header().Set("Content-Type", "text/html")
+		case ".css":
+			w.Header().Set("Content-Type", "text/css")
+		case ".js":
+			w.Header().Set("Content-Type", "text/javascript")
+		case ".jpg", ".jpeg":
+			w.Header().Set("Content-Type", "image/jpeg")
+		case ".png":
+			w.Header().Set("Content-Type", "text/png")
+		default:
+			w.Header().Set("Content-Type", "application/octet-stream")
+		}
 		f, err := root.Open(filepath.Join(".", r.URL.Path))
 		if err == nil {
 			defer f.Close()
@@ -69,6 +88,8 @@ func main() {
 	ln, err := net.Listen("tcp", ":0")
 	assert(err)
 	port := ln.Addr().(*net.TCPAddr).Port
-	go open(fmt.Sprintf("http://127.0.0.1:%d/index.html", port))
+	url := fmt.Sprintf("http://127.0.0.1:%d/", port)
+	fmt.Println("showing document at:", url)
+	go open(url)
 	panic(http.Serve(ln, nil))
 }
