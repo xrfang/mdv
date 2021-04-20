@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -84,7 +85,15 @@ func main() {
 		assert(err)
 	})
 	http.HandleFunc("/render", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(RenderMD(fn)))
+		defer func() {
+			if e := recover(); e != nil {
+				http.Error(w, trace("%v", e).Error(), http.StatusInternalServerError)
+			}
+		}()
+		res, err := RenderMD(fn)
+		assert(err)
+		w.Header().Set("Content-Type", "application/json")
+		assert(json.NewEncoder(w).Encode(res))
 	})
 	ln, err := net.Listen("tcp", ":0")
 	assert(err)

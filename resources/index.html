@@ -102,9 +102,10 @@
     };
     ready(() => {
       fetch("/render")
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-          document.querySelector(".md").innerHTML = data;
+          console.log("TODO:", data.toc);
+          document.querySelector(".md").innerHTML = data.doc;
           var mjx = document.createElement("script");
           mjx.src = "mathjax.js";
           mjx.async = true;
