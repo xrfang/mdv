@@ -20,6 +20,9 @@ var res embed.FS
 
 func main() {
 	ver := flag.Bool("version", false, "show version info")
+	serv := flag.Bool("serve", false, "serve only (do not open in browser)")
+	port := flag.Int("port", 0, "HTTP port (auto if not specified)")
+	wait := flag.Bool("wait", false, "do not automatically quit server")
 	flag.Usage = func() {
 		fmt.Printf("Markdown Viewer %s\n\n", verinfo())
 		fmt.Printf("USAGE: %s [OPTIONS] <markdown-file>\n\n", filepath.Base(os.Args[0]))
@@ -34,6 +37,12 @@ func main() {
 	if len(flag.Args()) == 0 {
 		fmt.Println("ERROR: markdown file not provided")
 		os.Exit(1)
+	}
+	if *port > 0 {
+		cf.Port = *port
+	}
+	if *wait {
+		cf.Quit = 0
 	}
 	root, _ := fs.Sub(res, "resources")
 	defcss := filepath.Join(cf.dir, "default.css")
@@ -116,14 +125,16 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		assert(json.NewEncoder(w).Encode(res))
 	})
-	ln, err := net.Listen("tcp", ":0")
+	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", cf.Port))
 	assert(err)
-	port := ln.Addr().(*net.TCPAddr).Port
-	url := fmt.Sprintf("http://127.0.0.1:%d/", port)
+	portInUse := ln.Addr().(*net.TCPAddr).Port
+	url := fmt.Sprintf("http://127.0.0.1:%d/", portInUse)
 	fmt.Println("showing document at:", url)
-	go func() {
-		open(url)
-		if cf.Quit > 0 {
+	if !*serv {
+		go open(url)
+	}
+	if cf.Quit > 0 {
+		go func() {
 			fmt.Printf("quit local server after %d seconds", cf.Quit)
 			for i := 0; i < cf.Quit; i++ {
 				time.Sleep(time.Second)
@@ -131,7 +142,7 @@ func main() {
 			}
 			fmt.Println(" bye")
 			os.Exit(0)
-		}
-	}()
+		}()
+	}
 	panic(http.Serve(ln, nil))
 }

@@ -10,6 +10,7 @@ import (
 type (
 	config struct {
 		CSS  string `json:"css"`
+		Port int    `json:"port"`
 		Quit int    `json:"quit"`
 		dir  string
 	}
