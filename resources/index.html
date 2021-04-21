@@ -1,48 +1,52 @@
 <html>
-  <head>
-    <title>Markdown Viewer</title>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=0"
-    />
-    <link rel="stylesheet" href="bootstrap.min.css" />
-    <link rel="stylesheet" href="mdv.css" />
-    <script src="polyfill.min.js"></script>
-  </head>
-  <body>
-    <div class="container md"></div>
-  </body>
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [
-          ["$", "$"],
-          ["\\(", "\\)"],
-        ],
-      },
-      svg: {
-        fontCache: "global",
-      },
-    };
-    var ready = callback => {
-      if (document.readyState != "loading") callback();
-      else document.addEventListener("DOMContentLoaded", callback);
-    };
-    ready(() => {
-      fetch("/render")
-        .then(response => response.json())
-        .then(data => {
-          console.log("TODO:", data.toc);
-          document.querySelector(".md").innerHTML = data.doc;
-          var mjx = document.createElement("script");
-          mjx.src = "mathjax.js";
-          mjx.async = true;
-          document.head.appendChild(mjx);
-        })
-        .catch(error => {
-          console.log("error:", error);
-        });
-    });
-  </script>
+
+<head>
+  <title>Markdown Viewer</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+  <link rel="stylesheet" href="bootstrap.min.css" />
+  <link rel="stylesheet" href="mdv.css" />
+</head>
+
+<body>
+  <div class="container md"></div>
+</body>
+<script src="polyfill.min.js"></script>
+<script async src="mathjax.js"></script>
+<script>
+  function render(refresh) {
+    var url = refresh ? "/render?refresh" : "/render"
+    fetch(url)
+      .then(response => {
+        if (response.ok) return response.json();
+      })
+      .then(data => {
+        if (typeof (data) == 'undefined') return;
+        console.log("TODO:", data.toc);
+        document.querySelector(".md").innerHTML = data.doc;
+        MathJax.typeset()
+      })
+      .catch(error => {
+        console.log("error:", error);
+      });
+  }
+  window.MathJax = {
+    tex: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"],
+      ],
+    },
+    svg: {
+      fontCache: "global",
+    },
+  };
+  var ready = callback => {
+    if (document.readyState != "loading") callback();
+    else document.addEventListener("DOMContentLoaded", callback);
+  };
+  ready(() => { render(false) });
+</script>
+<script src="live.js"></script>
+
 </html>

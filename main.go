@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -20,6 +21,7 @@ var res embed.FS
 
 func main() {
 	ver := flag.Bool("version", false, "show version info")
+	live := flag.Bool("live", false, "refresh when markdown file changes")
 	serv := flag.Bool("serve", false, "serve only (do not open in browser)")
 	port := flag.Int("port", 0, "HTTP port (auto if not specified)")
 	wait := flag.Bool("wait", false, "do not automatically quit server")
@@ -60,6 +62,8 @@ func main() {
 	}
 	fn := flag.Arg(0)
 	dir := filepath.Dir(fn)
+	var changed time.Time
+	var mx sync.Mutex
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if e := recover(); e != nil {
@@ -85,6 +89,12 @@ func main() {
 			}
 		case ".js":
 			w.Header().Set("Content-Type", "text/javascript")
+			if r.URL.Path == "/live.js" {
+				if *live {
+					fmt.Fprintln(w, `setInterval(function() { render(true) }, 500)`)
+				}
+				return
+			}
 		case ".jpg", ".jpeg":
 			w.Header().Set("Content-Type", "image/jpeg")
 		case ".png":
@@ -120,6 +130,22 @@ func main() {
 				http.Error(w, trace("%v", e).Error(), http.StatusInternalServerError)
 			}
 		}()
+		refresh := func() bool {
+			mx.Lock()
+			defer mx.Unlock()
+			st, err := os.Stat(fn)
+			assert(err)
+			_, refresh := r.URL.Query()["refresh"]
+			if refresh && !st.ModTime().After(changed) {
+				return false
+			}
+			changed = st.ModTime()
+			return true
+		}()
+		if !refresh {
+			http.Error(w, "Not Modified", http.StatusNotModified)
+			return
+		}
 		res, err := RenderMD(fn)
 		assert(err)
 		w.Header().Set("Content-Type", "application/json")
