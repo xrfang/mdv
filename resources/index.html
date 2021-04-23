@@ -18,7 +18,7 @@
       </div>
       <a class="toc-caret" href="#" onclick="toggleTOC()">&#8249;</a>
     </div>
-    <div class="container md"></div>
+    <div class="container md" onmouseout="resetTOC()"></div>
   </body>
   <script src="polyfill.min.js"></script>
   <script async src="mathjax.js"></script>
@@ -27,6 +27,11 @@
     function toggleTOC() {
       var toc = document.querySelector(".toc-container");
       toc.classList.toggle("hover");
+    }
+    function resetTOC() {
+      var toc = document.querySelector(".toc-container");
+      toc.scrollTop = 0;
+      toc.classList.remove("hover");
     }
     function render(refresh) {
       var url = refresh ? "/render?refresh" : "/render";
