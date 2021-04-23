@@ -7,6 +7,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=0"
     />
     <link rel="stylesheet" href="bootstrap.min.css" />
+    <link rel="stylesheet" href="highlight.css" />
     <link rel="stylesheet" href="mdv.css" />
   </head>
 
@@ -19,6 +20,7 @@
   </body>
   <script src="polyfill.min.js"></script>
   <script async src="mathjax.js"></script>
+  <script async src="highlight.js"></script>
   <script>
     function toggleTOC() {
       var toc = document.querySelector(".toc-container");
@@ -35,6 +37,7 @@
           console.log("TODO:", data.toc);
           document.querySelector(".md").innerHTML = data.doc;
           MathJax.typeset();
+          hljs.highlightAll();
         })
         .catch(error => {
           console.log("error:", error);

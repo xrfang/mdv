@@ -47,19 +47,8 @@ func main() {
 		cf.Quit = 0
 	}
 	root, _ := fs.Sub(res, "resources")
-	defcss := filepath.Join(cf.dir, "default.css")
-	_, err := os.Stat(defcss)
-	if err != nil {
-		func() {
-			w, err := os.Create(defcss)
-			assert(err)
-			defer func() { assert(w.Close()) }()
-			f, _ := root.Open(filepath.Join(".", "default.css"))
-			defer f.Close()
-			_, err = io.Copy(w, f)
-			assert(err)
-		}()
-	}
+	extract(root, "default.css")
+	extract(root, "highlight.css")
 	fn := flag.Arg(0)
 	dir := filepath.Dir(fn)
 	var changed time.Time

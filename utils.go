@@ -1,7 +1,11 @@
 package main
 
 import (
+	"io"
+	"io/fs"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 )
 
@@ -21,4 +25,21 @@ func open(url string) error {
 	}
 	args = append(args, url)
 	return exec.Command(cmd, args...).Start()
+}
+
+//extract embeded resource to config directory
+func extract(root fs.FS, fn string) {
+	fp := filepath.Join(cf.dir, fn)
+	_, err := os.Stat(fp)
+	if err != nil {
+		func() {
+			w, err := os.Create(fp)
+			assert(err)
+			defer func() { assert(w.Close()) }()
+			f, _ := root.Open(filepath.Join(".", fn))
+			defer f.Close()
+			_, err = io.Copy(w, f)
+			assert(err)
+		}()
+	}
 }
