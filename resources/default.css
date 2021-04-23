@@ -1,6 +1,30 @@
 body {
   background: #ddd;
 }
+#toc {
+  text-align: left;
+  padding-top: 10px;
+}
+.toc {
+  margin: 11 16 0 10;
+}
+.toc a {
+  text-decoration: none;
+  color:black;
+}
+.toc a:hover {
+  color:crimson;
+}
+.toc-level-1 {
+  font-weight: bold;
+  font-variant: small-caps;
+}
+.toc-level-2 {
+  font-weight: bold;
+}
+.toc-level-3 {
+  padding-left: 16px;
+}
 .toc-container {
   background: rgba(255, 255, 255, 0);
   position: fixed;
@@ -37,12 +61,15 @@ body {
 }
 .md h1 {
   font-size: 24px;
+  font-variant: small-caps;
+  border-bottom: solid 2px black;
   font-weight: bold;
   margin: 20 0 25 0;
 }
 
 .md h2 {
   font-size: 22px;
+  border-bottom: solid 1px black;
   font-weight: bold;
   margin: 15 0 20 0;
 }

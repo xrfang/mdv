@@ -13,7 +13,9 @@
 
   <body>
     <div class="toc-container">
-      <div id="toc" style="text-align: left">Table of Contents</div>
+      <div id="toc">
+        <span>Table of Contents</span>
+      </div>
       <a class="toc-caret" href="#" onclick="toggleTOC()">&#8249;</a>
     </div>
     <div class="container md"></div>
@@ -34,7 +36,13 @@
         })
         .then(data => {
           if (typeof data == "undefined") return;
-          console.log("TODO:", data.toc);
+          var toc = document.querySelector("#toc")
+          var tt = ""
+          data.toc.forEach(t => {
+            if (t.Level > 3) return
+            tt += `<div class="toc toc-level-${t.Level}"><a href="#${t.ID}">${t.Text}</a></div>`
+          })
+          toc.innerHTML = tt
           document.querySelector(".md").innerHTML = data.doc;
           MathJax.typeset();
           hljs.highlightAll();
