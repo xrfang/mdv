@@ -4,16 +4,18 @@ body {
 #toc {
   text-align: left;
   padding-top: 10px;
+  height: 100%;
+  overflow: hidden;
 }
 .toc {
   margin: 11 16 0 10;
 }
 .toc a {
   text-decoration: none;
-  color:black;
+  color: black;
 }
 .toc a:hover {
-  color:crimson;
+  color: crimson;
 }
 .toc-level-1 {
   font-weight: bold;
@@ -29,7 +31,7 @@ body {
   background: rgba(255, 255, 255, 0);
   position: fixed;
   top: 0;
-  left: -280;
+  left: -286;
   height: 100%;
   width: 300px;
   text-align: right;
@@ -44,15 +46,21 @@ body {
   left: 0;
   overflow-y: auto;
   background: rgba(255, 255, 255, 1);
-  box-shadow: 3px 3px 9px rgba(70, 70, 70, 0.6); 
+  box-shadow: 3px 3px 9px rgba(70, 70, 70, 0.6);
+}
+.hover #toc,
+.toc-container:hover #toc {
+  overflow: auto;
 }
 .toc-caret {
-  font-weight: bold;
-  font-size: 32px;
   position: absolute;
   top: 50%;
-  margin-top: -32px;
-  margin-left: -16px;
+  right: 0;
+  margin-top: -32;
+}
+.toc-caret a {
+  font-weight: bold;
+  font-size: 32px;
   text-decoration: none;
   color: black;
 }
