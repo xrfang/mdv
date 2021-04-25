@@ -51,6 +51,7 @@ func main() {
 	extract(root, "highlight.css")
 	fn := flag.Arg(0)
 	dir := filepath.Dir(fn)
+	entry := "/" + filepath.Base(fn)
 	var changed time.Time
 	var mx sync.Mutex
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -60,8 +61,11 @@ func main() {
 			}
 		}()
 		if strings.HasSuffix(r.URL.Path, "/") {
-			http.Redirect(w, r, "/index.html", http.StatusTemporaryRedirect)
+			http.Redirect(w, r, entry, http.StatusTemporaryRedirect)
 			return
+		}
+		if r.URL.Path == entry {
+			r.URL.Path = "/index.html"
 		}
 		switch strings.ToLower(filepath.Ext(r.URL.Path)) {
 		case ".html", ".htm":
