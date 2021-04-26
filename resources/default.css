@@ -83,26 +83,26 @@ body {
 }
 
 .md h2 {
-  font-size: 22px;
+  font-size: 20px;
   border-bottom: solid 1px black;
   font-weight: bold;
   margin: 15 0 20 0;
 }
 
 .md h3 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   margin: 15 0 20 0;
 }
 
 .md h4 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin: 10 0 15 0;
 }
 
 .md h5 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
   margin: 10 0 15 0;
 }
