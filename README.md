@@ -6,13 +6,13 @@
 
 ### Installation
 
-1. clone this repo and run `make` in the working directory.  To build for Windows, run `make windows`.
+1. clone this repo and run `make` in the working directory.  To build for Windows, run `make windows`, and for Mac `make mac`.
 1. copy `mdv` (or `mdv.exe`) to a directory listed in system `PATH`, and associate it with `.md` file.
 
 ### Command Line
 
 ```none
-Markdown Viewer V21.0945715
+Markdown Viewer
 
 USAGE: mdv [OPTIONS] <markdown-file>
 
