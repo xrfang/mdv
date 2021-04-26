@@ -20,12 +20,16 @@ body {
 .toc-level-1 {
   font-weight: bold;
   font-variant: small-caps;
+  font-size: 15px;
+  text-decoration: underline;
 }
 .toc-level-2 {
   font-weight: bold;
+  font-size: 14px;
 }
 .toc-level-3 {
   padding-left: 16px;
+  font-size: 13px;
 }
 .toc-container {
   background: rgba(255, 255, 255, 0);
