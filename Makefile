@@ -4,9 +4,15 @@ HASH=$(shell git log -n1 --pretty=format:%h)
 REVS=$(shell git log --oneline|wc -l)
 build: debug
 upx:
-	upx -9 $(GOMOD)
+	upx -9 $(GOMOD)*
 debug: setver compdbg
 release: setver comprel upx
+windows: export GOOS=windows
+windows: export GOARCH=amd64
+windows: release
+mac: export GOOS=darwin
+mac: export GOARCH=amd64
+mac: release
 setver:
 	cp verinfo.tpl version.go
 	sed -i 's/{_BRANCH}/$(BRANCH)/' version.go
@@ -17,4 +23,4 @@ comprel:
 compdbg:
 	go build -race -gcflags=all=-d=checkptr=0 .
 clean:
-	rm -fr $(GOMOD) version.go
+	rm -fr $(GOMOD)* version.go
