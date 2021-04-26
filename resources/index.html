@@ -42,13 +42,17 @@
         })
         .then(data => {
           if (typeof data == "undefined") return;
-          var toc = document.querySelector("#toc");
           var tt = "";
+          var tc = 0;
           data.toc.forEach(t => {
             if (t.Level > 3) return;
+            tc++
             tt += `<div class="toc toc-level-${t.Level}"><a href="#${t.ID}">${t.Text}</a></div>`;
           });
-          toc.innerHTML = tt;
+          document.querySelector("#toc").innerHTML = tt;
+          if (tc < 2) { //no TOC, hide panel completely
+            document.querySelector(".toc-container").style.left = -500;
+          }
           document.querySelector(".md").innerHTML = data.doc;
           MathJax.typeset();
           hljs.highlightAll();
