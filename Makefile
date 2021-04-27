@@ -7,6 +7,9 @@ upx:
 	upx -9 $(GOMOD)*
 debug: setver compdbg
 release: setver comprel upx
+linux: export GOOS=linux
+linux: export GOARCH=amd64
+linux: release
 windows: export GOOS=windows
 windows: export GOARCH=amd64
 windows: release

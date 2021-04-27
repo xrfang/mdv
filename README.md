@@ -6,8 +6,8 @@
 
 ### Installation
 
-1. Clone this repo and run `make` in the working directory. To build for Windows, run `make windows`, and for Mac `make mac`.
-1. Copy `mdv` (or `mdv.exe`) to a directory listed in system `PATH`, and associate it with `.md` file.
+1. Clone this repo and run `make` in the working directory. To build for other OS, run `make windows`, `make linux` or `make mac` respectively.  Note: the `Makefile` sets hardware platform to `amd64` for all OSs.
+2. Copy `mdv` (or `mdv.exe`) to a directory listed in system `PATH`, and associate it with `.md` file.
 
 ### Command Line
 
@@ -32,7 +32,7 @@ OPTIONS:
 
 ### Customize
 
-**MDV** will generate its configuration under `<USER-CONFIG>/mdv` folder. `USER-CONFIG` is `~/.config` on Linux and `%APPDATA%` on Windows. The `config.json` file in that folder contains the following options:
+**MDV** will generate its configuration under `<USER-CONFIG>/mdv` folder. `USER-CONFIG` is `~/.config` on Linux, `%APPDATA%` on Windows and `~/Library/Application Support` on Mac.  The `config.json` file in that folder contains the following options:
 
 ```json
 {
