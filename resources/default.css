@@ -77,14 +77,14 @@ body {
 .md h1 {
   font-size: 24px;
   font-variant: small-caps;
-  border-bottom: solid 2px black;
+  border-bottom: solid 2px #ddd;
   font-weight: bold;
   margin: 20 0 25 0;
 }
 
 .md h2 {
   font-size: 20px;
-  border-bottom: solid 1px black;
+  border-bottom: solid 1px #ddd;
   font-weight: bold;
   margin: 15 0 20 0;
 }
@@ -143,7 +143,7 @@ body {
 }
 
 .md pre {
-  background: #eeeeee;
+  background: #eee;
   padding: 10;
 }
 
