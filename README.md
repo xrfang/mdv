@@ -6,8 +6,9 @@
 
 ### Installation
 
-1. Clone this repo and run `make` in the working directory. To build for other OS, run `make windows`, `make linux` or `make mac` respectively.  Note: the `Makefile` sets hardware platform to `amd64` for all OSs.
-2. Copy `mdv` (or `mdv.exe`) to a directory listed in system `PATH`, and associate it with `.md` file.
+1. Assuming you are using Linux or Mac, clone this repo and run `make` in the working directory. Windows users may download binary releases from [GitHub](https://github.com/xrfang/mdv/releases/) directly.
+2. Cross-compiling is done by running `make windows`, `make linux` or `make mac` respectively.  
+3. Copy `mdv` (or `mdv.exe`) to a directory listed in system `PATH`, and associate it with `.md` file.
 
 ### Command Line
 
@@ -36,19 +37,27 @@ OPTIONS:
 
 ```json
 {
-    "css": "default.css",
+    "main_css":"default.css",
+    "code_css":"highlight.css",
     "port": 0,
-    "quit": 9
+    "quit": 9,
+    "rev": 33
 }
 ```
 
 Options are:
 
-* **css**: name of the stylesheet to use
+* **main_css**: name of the primary stylesheet
+* **code_css**: stylesheet for [syntax highlighting](https://highlightjs.org/)
 * **port**: HTTP port, 0 means auto select
 * **quit**: delay before quit the local server
+* **rev**: revision of **MDV** that generated this config file
 
 Usually, there is no need to edit this config file, except that you may want to use a new stylesheet. Alternatively, you can also edit the `default.css` file directly to tweak display effects. Also, there is a `highlight.css` which is the stylesheet for [syntax highlighting](https://highlightjs.org/).
+
+> **Hint**: when the version of **MDV** upgrades, configuration will be reset.  If
+> you use custom styles it is recommended that you use a new stylesheet and change
+> `config.json` to point to your own style (rather than modify `default.css` directly).
 
 ### Other Usages
 

@@ -72,8 +72,16 @@ func main() {
 			w.Header().Set("Content-Type", "text/html")
 		case ".css":
 			w.Header().Set("Content-Type", "text/css")
-			if r.URL.Path == "/mdv.css" {
-				f, err := os.Open(filepath.Join(cf.dir, cf.CSS))
+			switch r.URL.Path {
+			case "/main.css":
+				f, err := os.Open(filepath.Join(cf.dir, cf.MainCSS))
+				assert(err)
+				defer f.Close()
+				_, err = io.Copy(w, f)
+				assert(err)
+				return
+			case "/code.css":
+				f, err := os.Open(filepath.Join(cf.dir, cf.CodeCSS))
 				assert(err)
 				defer f.Close()
 				_, err = io.Copy(w, f)
