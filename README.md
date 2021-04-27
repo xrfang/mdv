@@ -1,13 +1,13 @@
 # mdv - Markdown Viewer
 
-**MDV** is a "pure" markdown viewer in the sense that 1) it is just a viewer (not an editor); 2) it is a standalone tool, not a browser plugin.  Comparing to other viewers (or editors), **MDV** provides a pleasant viewing expience and at the same time is customizable and versatile.
+**MDV** is a "pure" markdown viewer in the sense that 1) it is just a viewer (not an editor); 2) it is a standalone tool, not a browser plugin. Comparing to other viewers (or editors), **MDV** provides a pleasant viewing experience and at the same time is customizable and versatile.
 
 ## USAGE
 
 ### Installation
 
-1. clone this repo and run `make` in the working directory.  To build for Windows, run `make windows`, and for Mac `make mac`.
-1. copy `mdv` (or `mdv.exe`) to a directory listed in system `PATH`, and associate it with `.md` file.
+1. Clone this repo and run `make` in the working directory. To build for Windows, run `make windows`, and for Mac `make mac`.
+1. Copy `mdv` (or `mdv.exe`) to a directory listed in system `PATH`, and associate it with `.md` file.
 
 ### Command Line
 
@@ -32,7 +32,7 @@ OPTIONS:
 
 ### Customize
 
-**MDV** will generate its configuration under `<USER-CONFIG>/mdv` folder.  `USER-CONFIG` is `~/.config` on Linux and `%APPDATA%` on Windows.  the `config.json` file in that folder contains the following options:
+**MDV** will generate its configuration under `<USER-CONFIG>/mdv` folder. `USER-CONFIG` is `~/.config` on Linux and `%APPDATA%` on Windows. The `config.json` file in that folder contains the following options:
 
 ```json
 {
@@ -48,7 +48,7 @@ Options are:
 * **port**: HTTP port, 0 means auto select
 * **quit**: delay before quit the local server
 
-Usually, there is no need to edit this config file, except that you may want to use a new stylesheet.  Alternatively, you can also edit the `default.css` file directly to tweak display effects.   Also, there is a `highlight.css` which is the stylesheet for [syntax highlighting](https://highlightjs.org/).
+Usually, there is no need to edit this config file, except that you may want to use a new stylesheet. Alternatively, you can also edit the `default.css` file directly to tweak display effects. Also, there is a `highlight.css` which is the stylesheet for [syntax highlighting](https://highlightjs.org/).
 
 ### Other Usages
 
