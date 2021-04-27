@@ -17,10 +17,10 @@ mac: export GOOS=darwin
 mac: export GOARCH=amd64
 mac: release
 setver:
-	cp verinfo.tpl version.go
-	sed -i 's/{_BRANCH}/$(BRANCH)/' version.go
-	sed -i 's/{_G_HASH}/$(HASH)/' version.go
-	sed -i 's/{_G_REVS}/$(REVS)/' version.go
+	sed 's/{_BRANCH}/$(BRANCH)/' verinfo.tpl > version.sed.1
+	sed 's/{_G_HASH}/$(HASH)/' version.sed.1 > version.sed.2
+	sed 's/{_G_REVS}/$(REVS)/' version.sed.2 > version.go
+	rm -fr version.sed*
 comprel:
 	go build -ldflags="-s -w" .
 compdbg:
