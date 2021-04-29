@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=0"
     />
-    <link rel="stylesheet" href="bootstrap.min.css" />
+    <link rel="stylesheet" href="bootstrap-grid.min.css" />
     <link rel="stylesheet" href="code.css" />
     <link rel="stylesheet" href="main.css" />
   </head>
@@ -46,11 +46,12 @@
           var tc = 0;
           data.toc.forEach(t => {
             if (t.Level > 3) return;
-            tc++
+            tc++;
             tt += `<div class="toc toc-level-${t.Level}"><a href="#${t.ID}">${t.Text}</a></div>`;
           });
           document.querySelector("#toc").innerHTML = tt;
-          if (tc < 2) { //no TOC, hide panel completely
+          if (tc < 2) {
+            //no TOC, hide panel completely
             document.querySelector(".toc-container").style.left = -500;
           }
           document.querySelector(".md").innerHTML = data.doc;
