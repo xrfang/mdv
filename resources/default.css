@@ -48,7 +48,6 @@ body {
 .toc-container:hover,
 .hover {
   left: 0;
-  overflow-y: auto;
   background: rgba(255, 255, 255, 1);
   box-shadow: 3px 3px 9px rgba(70, 70, 70, 0.6);
 }
