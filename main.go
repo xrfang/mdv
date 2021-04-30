@@ -49,7 +49,17 @@ func main() {
 	root, _ := fs.Sub(res, "resources")
 	extract(root, "default.css")
 	extract(root, "highlight.css")
-	fn := flag.Arg(0)
+	col, err := collect(flag.Arg(0))
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	if col.Index < 0 {
+		fmt.Fprintln(os.Stderr, "nothing to view")
+		os.Exit(1)
+	}
+	//TODO: if there are more than one file to view, show the files panel...
+	fn := filepath.Join(col.Path, col.Files[col.Index])
 	dir := filepath.Dir(fn)
 	entry := "/" + filepath.Base(fn)
 	var changed time.Time
