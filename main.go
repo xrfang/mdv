@@ -10,7 +10,9 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -58,10 +60,6 @@ func main() {
 		fmt.Fprintln(os.Stderr, "nothing to view")
 		os.Exit(1)
 	}
-	//TODO: if there are more than one file to view, show the files panel...
-	fn := filepath.Join(col.Path, col.Files[col.Index])
-	dir := filepath.Dir(fn)
-	entry := "/" + filepath.Base(fn)
 	var changed time.Time
 	var mx sync.Mutex
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -70,6 +68,11 @@ func main() {
 				http.Error(w, trace("%v", e).Error(), http.StatusInternalServerError)
 			}
 		}()
+		idx, err := strconv.Atoi(r.URL.Query().Get("idx"))
+		if err == nil {
+			col.Index = idx
+		}
+		entry := "/" + col.CurrentFile()
 		if strings.HasSuffix(r.URL.Path, "/") {
 			http.Redirect(w, r, entry, http.StatusTemporaryRedirect)
 			return
@@ -123,6 +126,7 @@ func main() {
 		if !os.IsNotExist(err) {
 			panic(err)
 		}
+		dir := filepath.Dir(col.CurrentPath())
 		f, err = os.Open(filepath.Join(dir, r.URL.Path))
 		if err != nil {
 			if os.IsNotExist(err) {
@@ -141,6 +145,7 @@ func main() {
 				http.Error(w, trace("%v", e).Error(), http.StatusInternalServerError)
 			}
 		}()
+		fn := col.CurrentPath()
 		refresh := func() bool {
 			mx.Lock()
 			defer mx.Unlock()
@@ -159,6 +164,21 @@ func main() {
 		}
 		res, err := RenderMD(fn)
 		assert(err)
+		var fs []map[string]interface{}
+		for i, f := range col.Files {
+			dir := filepath.Dir(f)
+			fn := filepath.Base(f)
+			dir = strings.ReplaceAll(dir, string(os.PathSeparator), "/")
+			if dir != "" {
+				fn = path.Join(dir, fn)
+			}
+			fs = append(fs, map[string]interface{}{
+				"idx": i,
+				"sel": i == col.Index,
+				"fn":  fn,
+			})
+		}
+		res["col"] = fs
 		w.Header().Set("Content-Type", "application/json")
 		assert(json.NewEncoder(w).Encode(res))
 	})

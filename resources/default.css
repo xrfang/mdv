@@ -1,6 +1,4 @@
-body {
-  background: #ddd;
-}
+/* table of contents styles */
 #toc {
   text-align: left;
   padding-top: 10px;
@@ -35,7 +33,7 @@ body {
   background: rgba(255, 255, 255, 0);
   position: fixed;
   top: 0;
-  left: -286;
+  left: -282px;
   height: 100%;
   width: 300px;
   text-align: right;
@@ -46,12 +44,12 @@ body {
   transition: all 500ms;
 }
 .toc-container:hover,
-.hover {
+.toc-container-hover {
   left: 0;
   background: rgba(255, 255, 255, 1);
   box-shadow: 3px 3px 9px rgba(70, 70, 70, 0.6);
 }
-.hover #toc,
+.toc-container-hover #toc,
 .toc-container:hover #toc {
   overflow: auto;
 }
@@ -67,11 +65,78 @@ body {
   text-decoration: none;
   color: black;
 }
+
+/* file selection panel styles */
+#files {
+  text-align: right;
+  padding-top: 10px;
+  height: 100%;
+  overflow: hidden;
+}
+.files {
+  margin: 11 16 0 10;
+}
+.files a {
+  text-decoration: none;
+  color: black;
+}
+.files a:hover {
+  color: crimson;
+}
+.files-container {
+  background: rgba(255, 255, 255, 0);
+  position: fixed;
+  top: 0;
+  right: -282px;
+  height: 100%;
+  width: 300px;
+  text-align: left;
+  overflow: hidden;
+  z-index: 999;
+  -webkit-transition: all 500ms;
+  -moz-transition: all 500ms;
+  transition: all 500ms;
+}
+.files-container:hover,
+.files-container-hover {
+  right: 0;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: -3px 3px 9px rgba(70, 70, 70, 0.6);
+}
+.files-container-hover #files,
+.files-container:hover #files {
+  overflow: auto;
+}
+#files .current {
+  color: purple;
+  font-weight: bold;
+}
+.files-caret {
+  position: absolute;
+  top: 50%;
+  margin-top: -32;
+}
+.files-caret a {
+  font-weight: bold;
+  font-size: 32px;
+  text-decoration: none;
+  color: black;
+}
+
+/* general page layouts */
+body {
+  background: #ddd;
+}
 .container {
   overflow: hidden;
   zoom: 1;
   background: white;
   padding: 30 70;
+}
+
+/* markdown text & layout styles */
+.md code:not([class]) {
+  color: crimson;
 }
 .md h1 {
   font-size: 24px;

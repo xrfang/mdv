@@ -77,6 +77,7 @@ Apart from a simple viewer, **MDV** can also work as a "markdown preview engine"
   * Typographer
   * Unsafe (parse embeded HTML tags)
 * Table of Contents in collapsible side panel
+* File selector in collapsible side panel
 * MathJax support - nicely show math formular
 * Sytax highlighting for common programming languages
 

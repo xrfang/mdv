@@ -15,6 +15,14 @@ type (
 	}
 )
 
+func (c collection) CurrentFile() string {
+	return c.Files[c.Index]
+}
+
+func (c collection) CurrentPath() string {
+	return filepath.Join(c.Path, c.CurrentFile())
+}
+
 func collect(root string) (col *collection, err error) {
 	defer func() {
 		if e := recover(); e != nil {

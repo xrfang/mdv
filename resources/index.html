@@ -6,9 +6,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=0"
     />
-    <link rel="stylesheet" href="bootstrap-grid.min.css" />
-    <link rel="stylesheet" href="code.css" />
-    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="/bootstrap.min.css" />
+    <link rel="stylesheet" href="/code.css" />
+    <link rel="stylesheet" href="/main.css" />
   </head>
 
   <body>
@@ -20,7 +20,15 @@
         <a href="#" onclick="toggleTOC()">&#8249;</a>
       </div>
     </div>
-    <div class="container md" onclick="resetTOC()"></div>
+    <div class="container md" onclick="resetPanels()"></div>
+    <div class="files-container">
+      <div class="files-caret">
+        <a href="#" onclick="toggleFiles()">&#8250;</a>
+      </div>
+      <div id="files">
+        <span>File Manager</span>
+      </div>
+    </div>
   </body>
   <script src="polyfill.min.js"></script>
   <script async src="mathjax.js"></script>
@@ -28,11 +36,17 @@
   <script>
     function toggleTOC() {
       var toc = document.querySelector(".toc-container");
-      toc.classList.toggle("hover");
+      toc.classList.toggle("toc-container-hover");
     }
-    function resetTOC() {
+    function toggleFiles() {
+      var files = document.querySelector(".files-container");
+      files.classList.toggle("files-container-hover");
+    }
+    function resetPanels() {
       var toc = document.querySelector(".toc-container");
-      toc.classList.remove("hover");
+      toc.classList.remove("toc-container-hover");
+      var files = document.querySelector(".files-container");
+      files.classList.remove("files-container-hover");
     }
     function render(refresh) {
       var url = refresh ? "/render?refresh" : "/render";
@@ -42,6 +56,22 @@
         })
         .then(data => {
           if (typeof data == "undefined") return;
+          //render files
+          if (data.col.length > 1) {
+            var ft = "";
+            data.col.forEach(c => {
+              var item = c.sel ? 
+                  `<span class="current">${c.fn}</span>` :
+                  `<a href="/?idx=${c.idx}">${c.fn}</a>`;
+              ft += `<div class="files">${item}</div>`;
+            });
+            document.querySelector("#files").innerHTML = ft;
+            document.querySelector("#files .current").scrollIntoView();
+          } else { 
+            //only one file hide panel completely
+            document.querySelector(".files-container").style.right = -500;
+          }
+          //render toc
           var tt = "";
           var tc = 0;
           data.toc.forEach(t => {
@@ -54,6 +84,7 @@
             //no TOC, hide panel completely
             document.querySelector(".toc-container").style.left = -500;
           }
+          //render document
           document.querySelector(".md").innerHTML = data.doc;
           MathJax.typeset();
           hljs.highlightAll();
