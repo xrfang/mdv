@@ -13,6 +13,7 @@ type (
 	config struct {
 		MainCSS string `json:"main_css"`
 		CodeCSS string `json:"code_css"`
+		Recurse int    `json:"recurse"`
 		Port    int    `json:"port"`
 		Rev     int    `json:"rev"`
 		dir     string
@@ -58,6 +59,7 @@ var cf config
 func init() {
 	cf.MainCSS = "default.css"
 	cf.CodeCSS = "highlight.css"
+	cf.Recurse = 2
 	dir, err := os.UserConfigDir()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)

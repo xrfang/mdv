@@ -46,7 +46,7 @@ func main() {
 	root, _ := fs.Sub(res, "resources")
 	extract(root, "default.css")
 	extract(root, "highlight.css")
-	col, err := collect(flag.Arg(0))
+	col, err := collect(flag.Arg(0), cf.Recurse)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

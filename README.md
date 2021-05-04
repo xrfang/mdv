@@ -33,11 +33,11 @@ OPTIONS:
 
 ```json
 {
-    "main_css":"default.css",
-    "code_css":"highlight.css",
-    "port": 0,
-    "quit": 9,
-    "rev": 33
+    "main_css": "default.css",
+    "code_css": "highlight.css",
+    "port":     0,
+    "recurse":  2,
+    "rev":      39
 }
 ```
 
@@ -46,7 +46,7 @@ Options are:
 * **main_css**: name of the primary stylesheet
 * **code_css**: stylesheet for [syntax highlighting](https://highlightjs.org/)
 * **port**: HTTP port, 0 means auto select
-* **quit**: delay before quit the local server
+* **recurse**: level of sub-directories to search for markdown files (1~9, default 2)
 * **rev**: revision of **MDV** that generated this config file
 
 Usually, there is no need to edit this config file, except that you may want to use a new stylesheet. Alternatively, you can also edit the `default.css` file directly to tweak display effects. Also, there is a `highlight.css` which is the stylesheet for [syntax highlighting](https://highlightjs.org/).
