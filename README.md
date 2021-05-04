@@ -19,16 +19,12 @@ USAGE: mdv [OPTIONS] <markdown-file>
 
 OPTIONS:
 
-  -live
-    	refresh when markdown file changes
   -port int
     	HTTP port (auto if not specified)
   -serve
     	serve only (do not open in browser)
   -version
     	show version info
-  -wait
-    	do not automatically quit server
 ```
 
 ### Customize
@@ -63,10 +59,8 @@ Usually, there is no need to edit this config file, except that you may want to 
 
 Apart from a simple viewer, **MDV** can also work as a "markdown preview engine", with the following options:
 
-* `-live`: live update when markdown file changes
 * `-port`: use a specific port instead of randomly choose one
 * `-serve`: do not open a browser window (let the editor handle it)
-* `-wait`: do not quit the server automatically
 
 ## Markdown Features
 

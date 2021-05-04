@@ -23,10 +23,8 @@ var res embed.FS
 
 func main() {
 	ver := flag.Bool("version", false, "show version info")
-	live := flag.Bool("live", false, "refresh when markdown file changes")
 	serv := flag.Bool("serve", false, "serve only (do not open in browser)")
 	port := flag.Int("port", 0, "HTTP port (auto if not specified)")
-	wait := flag.Bool("wait", false, "do not automatically quit server")
 	flag.Usage = func() {
 		fmt.Printf("Markdown Viewer %s\n\n", verinfo())
 		fmt.Printf("USAGE: %s [OPTIONS] <markdown-file>\n\n", filepath.Base(os.Args[0]))
@@ -44,9 +42,6 @@ func main() {
 	}
 	if *port > 0 {
 		cf.Port = *port
-	}
-	if *wait {
-		cf.Quit = 0
 	}
 	root, _ := fs.Sub(res, "resources")
 	extract(root, "default.css")
@@ -103,12 +98,6 @@ func main() {
 			}
 		case ".js":
 			w.Header().Set("Content-Type", "text/javascript")
-			if r.URL.Path == "/live.js" {
-				if *live {
-					fmt.Fprintln(w, `setInterval(function() { render(true) }, 500)`)
-				}
-				return
-			}
 		case ".jpg", ".jpeg":
 			w.Header().Set("Content-Type", "image/jpeg")
 		case ".png":
@@ -145,6 +134,7 @@ func main() {
 				http.Error(w, trace("%v", e).Error(), http.StatusInternalServerError)
 			}
 		}()
+		refreshTickCount()
 		fn := col.CurrentPath()
 		refresh := func() bool {
 			mx.Lock()
@@ -189,17 +179,6 @@ func main() {
 	fmt.Println("showing document at:", url)
 	if !*serv {
 		go open(url)
-	}
-	if cf.Quit > 0 {
-		go func() {
-			fmt.Printf("quit local server after %d seconds", cf.Quit)
-			for i := 0; i < cf.Quit; i++ {
-				time.Sleep(time.Second)
-				fmt.Print(".")
-			}
-			fmt.Println(" bye")
-			os.Exit(0)
-		}()
 	}
 	panic(http.Serve(ln, nil))
 }

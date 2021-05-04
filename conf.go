@@ -14,7 +14,6 @@ type (
 		MainCSS string `json:"main_css"`
 		CodeCSS string `json:"code_css"`
 		Port    int    `json:"port"`
-		Quit    int    `json:"quit"`
 		Rev     int    `json:"rev"`
 		dir     string
 	}
@@ -59,7 +58,6 @@ var cf config
 func init() {
 	cf.MainCSS = "default.css"
 	cf.CodeCSS = "highlight.css"
-	cf.Quit = 9
 	dir, err := os.UserConfigDir()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
