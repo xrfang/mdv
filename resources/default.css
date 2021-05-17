@@ -137,6 +137,7 @@ body {
   color: #212529;
 }
 .container {
+  width: 100%;
   margin: auto;
   overflow: hidden;
   zoom: 1;
