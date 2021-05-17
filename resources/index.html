@@ -56,20 +56,15 @@
         .then(data => {
           if (typeof data == "undefined") return;
           //render files
-          if (data.col.length > 1) {
-            var ft = "";
-            data.col.forEach(c => {
-              var item = c.sel ? 
-                  `<span class="current">${c.fn}</span>` :
-                  `<a href="/?idx=${c.idx}">${c.fn}</a>`;
-              ft += `<div class="files">${item}</div>`;
-            });
-            document.querySelector("#files").innerHTML = ft;
-            document.querySelector("#files .current").scrollIntoView();
-          } else { 
-            //only one file hide panel completely
-            document.querySelector(".files-container").style.right = -500;
-          }
+          var ft = "";
+          data.col.forEach(c => {
+            var item = c.sel ? 
+                `<span class="current">${c.fn}</span>` :
+                `<a href="/?idx=${c.idx}">${c.fn}</a>`;
+            ft += `<div class="files">${item}</div>`;
+          });
+          document.querySelector("#files").innerHTML = ft;
+          document.querySelector("#files .current").scrollIntoView();
           //render toc
           var tt = "";
           var tc = 0;
@@ -79,10 +74,6 @@
             tt += `<div class="toc toc-level-${t.Level}"><a href="#${t.ID}">${t.Text}</a></div>`;
           });
           document.querySelector("#toc").innerHTML = tt;
-          if (tc < 2) {
-            //no TOC, hide panel completely
-            document.querySelector(".toc-container").style.left = -500;
-          }
           //render document
           document.querySelector(".md").innerHTML = data.doc;
           MathJax.typeset();
