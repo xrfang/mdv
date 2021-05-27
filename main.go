@@ -101,7 +101,7 @@ func main() {
 		case ".jpg", ".jpeg":
 			w.Header().Set("Content-Type", "image/jpeg")
 		case ".png":
-			w.Header().Set("Content-Type", "text/png")
+			w.Header().Set("Content-Type", "image/png")
 		default:
 			w.Header().Set("Content-Type", "application/octet-stream")
 		}
