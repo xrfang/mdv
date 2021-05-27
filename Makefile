@@ -4,7 +4,7 @@ HASH=$(shell git log -n1 --pretty=format:%h)
 REVS=$(shell git log --oneline|wc -l)
 build: debug
 upx:
-	upx -9 $(GOMOD)*
+	upx --best --lzma $(GOMOD)*
 debug: setver compdbg
 release: setver comprel upx
 linux: export GOOS=linux
