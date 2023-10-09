@@ -16,6 +16,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"go.xrfang.cn/yal"
 )
 
 //go:embed resources/*
@@ -58,11 +60,12 @@ func main() {
 	var changed time.Time
 	var mx sync.Mutex
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		defer func() {
-			if e := recover(); e != nil {
-				http.Error(w, trace("%v", e).Error(), http.StatusInternalServerError)
+		defer yal.Catch(func(err error) error {
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
-		}()
+			return err
+		})
 		idx, err := strconv.Atoi(r.URL.Query().Get("idx"))
 		if err == nil {
 			col.Index = idx
@@ -83,17 +86,17 @@ func main() {
 			switch r.URL.Path {
 			case "/main.css":
 				f, err := os.Open(filepath.Join(cf.dir, cf.MainCSS))
-				assert(err)
+				yal.Assert(err)
 				defer f.Close()
 				_, err = io.Copy(w, f)
-				assert(err)
+				yal.Assert(err)
 				return
 			case "/code.css":
 				f, err := os.Open(filepath.Join(cf.dir, cf.CodeCSS))
-				assert(err)
+				yal.Assert(err)
 				defer f.Close()
 				_, err = io.Copy(w, f)
-				assert(err)
+				yal.Assert(err)
 				return
 			}
 		case ".js":
@@ -109,7 +112,7 @@ func main() {
 		if err == nil {
 			defer f.Close()
 			_, err = io.Copy(w, f)
-			assert(err)
+			yal.Assert(err)
 			return
 		}
 		if !os.IsNotExist(err) {
@@ -126,21 +129,22 @@ func main() {
 		}
 		defer f.Close()
 		_, err = io.Copy(w, f)
-		assert(err)
+		yal.Assert(err)
 	})
 	http.HandleFunc("/render", func(w http.ResponseWriter, r *http.Request) {
-		defer func() {
-			if e := recover(); e != nil {
-				http.Error(w, trace("%v", e).Error(), http.StatusInternalServerError)
+		defer yal.Catch(func(err error) error {
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
-		}()
+			return err
+		})
 		refreshTickCount()
 		fn := col.CurrentPath()
 		refresh := func() bool {
 			mx.Lock()
 			defer mx.Unlock()
 			st, err := os.Stat(fn)
-			assert(err)
+			yal.Assert(err)
 			_, refresh := r.URL.Query()["refresh"]
 			if refresh && !st.ModTime().After(changed) {
 				return false
@@ -153,7 +157,7 @@ func main() {
 			return
 		}
 		res, err := RenderMD(fn)
-		assert(err)
+		yal.Assert(err)
 		var fs []map[string]interface{}
 		for i, f := range col.Files {
 			dir := filepath.Dir(f)
@@ -170,10 +174,10 @@ func main() {
 		}
 		res["col"] = fs
 		w.Header().Set("Content-Type", "application/json")
-		assert(json.NewEncoder(w).Encode(res))
+		yal.Assert(json.NewEncoder(w).Encode(res))
 	})
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", cf.Port))
-	assert(err)
+	yal.Assert(err)
 	portInUse := ln.Addr().(*net.TCPAddr).Port
 	url := fmt.Sprintf("http://127.0.0.1:%d/", portInUse)
 	fmt.Println("showing document at:", url)

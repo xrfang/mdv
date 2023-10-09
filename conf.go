@@ -7,6 +7,8 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+
+	"go.xrfang.cn/yal"
 )
 
 type (
@@ -21,16 +23,18 @@ type (
 )
 
 func (c *config) Load() (err error) {
-	defer func() {
-		if e := recover(); e != nil {
-			err = trace("%v", e)
+	defer yal.Catch(func(e error) error {
+		err = e
+		if os.IsNotExist(err) {
+			return nil
 		}
-	}()
+		return err
+	})
 	cfg := filepath.Join(c.dir, "config.json")
 	f, err := os.Open(cfg)
-	assert(err)
+	yal.Assert(err)
 	defer f.Close()
-	assert(json.NewDecoder(f).Decode(c))
+	yal.Assert(json.NewDecoder(f).Decode(c))
 	rev, _ := strconv.Atoi(_G_REVS)
 	if rev > c.Rev {
 		os.Remove(cfg)
@@ -42,14 +46,10 @@ func (c *config) Load() (err error) {
 }
 
 func (c config) Save() (err error) {
-	defer func() {
-		if e := recover(); e != nil {
-			err = trace("%v", e)
-		}
-	}()
+	defer yal.Catch(&err)
 	f, err := os.Create(filepath.Join(c.dir, "config.json"))
-	assert(err)
-	defer func() { assert(f.Close()) }()
+	yal.Assert(err)
+	defer func() { yal.Assert(f.Close()) }()
 	c.Rev, _ = strconv.Atoi(_G_REVS)
 	return json.NewEncoder(f).Encode(c)
 }
@@ -72,7 +72,9 @@ func init() {
 	}
 	cf.dir = dir
 	if err := cf.Load(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		if !os.IsNotExist(err) {
+			fmt.Fprintln(os.Stderr, err)
+		}
 		err = cf.Save()
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)

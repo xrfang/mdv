@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"go.xrfang.cn/yal"
 )
 
 type (
@@ -25,10 +27,10 @@ func (c collection) CurrentPath() string {
 
 func iter(path string, level int) []string {
 	d, err := os.Open(path)
-	assert(err)
+	yal.Assert(err)
 	defer d.Close()
 	fis, err := d.ReadDir(0)
-	assert(err)
+	yal.Assert(err)
 	sub := make(map[string][]string)
 	var items []string
 	for _, fi := range fis {
@@ -70,10 +72,10 @@ func collect(entry string, depth int) (col *collection, err error) {
 		}
 	}()
 	entry, err = filepath.Abs(entry)
-	assert(err)
+	yal.Assert(err)
 	root := entry
 	st, err := os.Stat(entry)
-	assert(err)
+	yal.Assert(err)
 	if !st.IsDir() {
 		root = filepath.Dir(entry)
 	}

@@ -10,19 +10,16 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/renderer/html"
+	"go.xrfang.cn/yal"
 )
 
 func RenderMD(fn string) (res map[string]interface{}, err error) {
-	defer func() {
-		if e := recover(); e != nil {
-			err = trace("%v", e)
-		}
-	}()
+	defer yal.Catch(&err)
 	f, err := os.Open(fn)
-	assert(err)
+	yal.Assert(err)
 	defer f.Close()
 	src, err := ioutil.ReadAll(f)
-	assert(err)
+	yal.Assert(err)
 	render := gmt.New(
 		goldmark.WithExtensions(
 			extension.DefinitionList,
@@ -34,7 +31,7 @@ func RenderMD(fn string) (res map[string]interface{}, err error) {
 	)
 	var buf bytes.Buffer
 	toc, err := render(src, &buf)
-	assert(err)
+	yal.Assert(err)
 	return map[string]interface{}{
 		"toc": toc,
 		"doc": strings.TrimSpace(buf.String()),

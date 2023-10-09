@@ -7,6 +7,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+
+	"go.xrfang.cn/yal"
 )
 
 // open opens the specified URL in the default browser of the user.
@@ -27,19 +29,19 @@ func open(url string) error {
 	return exec.Command(cmd, args...).Start()
 }
 
-//extract embeded resource to config directory
+// extract embeded resource to config directory
 func extract(root fs.FS, fn string) {
 	fp := filepath.Join(cf.dir, fn)
 	_, err := os.Stat(fp)
 	if err != nil {
 		func() {
 			w, err := os.Create(fp)
-			assert(err)
-			defer func() { assert(w.Close()) }()
+			yal.Assert(err)
+			defer func() { yal.Assert(w.Close()) }()
 			f, _ := root.Open(filepath.Join(".", fn))
 			defer f.Close()
 			_, err = io.Copy(w, f)
-			assert(err)
+			yal.Assert(err)
 		}()
 	}
 }

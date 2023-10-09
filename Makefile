@@ -22,7 +22,7 @@ setver:
 	sed 's/{_G_REVS}/$(REVS)/' version.sed.2 > version.go
 	rm -fr version.sed*
 comprel:
-	go build -ldflags="-s -w" .
+	CGO_ENABLED=0 go build -ldflags="-s -w" .
 compdbg:
 	go build -race -gcflags=all=-d=checkptr=0 .
 clean:
