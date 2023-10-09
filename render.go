@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -15,10 +14,7 @@ import (
 
 func RenderMD(fn string) (res map[string]interface{}, err error) {
 	defer yal.Catch(&err)
-	f, err := os.Open(fn)
-	yal.Assert(err)
-	defer f.Close()
-	src, err := ioutil.ReadAll(f)
+	src,err := os.ReadFile(fn)
 	yal.Assert(err)
 	render := gmt.New(
 		goldmark.WithExtensions(
