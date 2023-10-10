@@ -232,6 +232,7 @@ body {
   background: #eee;
   padding: 10;
   text-wrap: balance;
+  word-break: break-all;
 }
 
 .md blockquote {
