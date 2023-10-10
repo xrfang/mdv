@@ -137,7 +137,6 @@ body {
   color: #212529;
 }
 .container {
-  width: 100%;
   margin: auto;
   overflow: hidden;
   zoom: 1;
@@ -232,6 +231,7 @@ body {
 .md pre {
   background: #eee;
   padding: 10;
+  text-wrap: balance;
 }
 
 .md blockquote {
