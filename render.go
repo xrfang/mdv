@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"os"
+	"path/filepath"
 	"strings"
 
 	gmt "github.com/mdigger/goldmark-toc"
@@ -14,8 +15,13 @@ import (
 
 func RenderMD(fn string) (res map[string]interface{}, err error) {
 	defer yal.Catch(&err)
-	src,err := os.ReadFile(fn)
+	src, err := os.ReadFile(fn)
 	yal.Assert(err)
+	base := filepath.Base(fn)
+	ext := filepath.Ext(base)
+	base = base[:len(base)-len(ext)]
+	src = bytes.ReplaceAll(src, []byte("<title>Markdown Viewer</title>"),
+		[]byte("<title>"+base+"</title>"))
 	render := gmt.New(
 		goldmark.WithExtensions(
 			extension.DefinitionList,
