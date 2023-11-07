@@ -55,6 +55,7 @@
         })
         .then(data => {
           if (typeof data == "undefined") return;
+          document.title = data.title;
           //render files
           var ft = "";
           data.col.forEach(c => {

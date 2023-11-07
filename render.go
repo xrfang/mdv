@@ -20,8 +20,6 @@ func RenderMD(fn string) (res map[string]interface{}, err error) {
 	base := filepath.Base(fn)
 	ext := filepath.Ext(base)
 	base = base[:len(base)-len(ext)]
-	src = bytes.ReplaceAll(src, []byte("<title>Markdown Viewer</title>"),
-		[]byte("<title>"+base+"</title>"))
 	render := gmt.New(
 		goldmark.WithExtensions(
 			extension.DefinitionList,
@@ -35,7 +33,8 @@ func RenderMD(fn string) (res map[string]interface{}, err error) {
 	toc, err := render(src, &buf)
 	yal.Assert(err)
 	return map[string]interface{}{
-		"toc": toc,
-		"doc": strings.TrimSpace(buf.String()),
+		"toc":   toc,
+		"title": base,
+		"doc":   strings.TrimSpace(buf.String()),
 	}, nil
 }
