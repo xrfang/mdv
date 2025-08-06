@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"go.xrfang.cn/yal"
+	"go.xrfang.cn/act"
 )
 
 type (
@@ -23,7 +23,7 @@ type (
 )
 
 func (c *config) Load() (err error) {
-	defer yal.Catch(func(e error) error {
+	defer act.Catch(func(e error) error {
 		err = e
 		if os.IsNotExist(err) {
 			return nil
@@ -32,9 +32,9 @@ func (c *config) Load() (err error) {
 	})
 	cfg := filepath.Join(c.dir, "config.json")
 	f, err := os.Open(cfg)
-	yal.Assert(err)
+	act.Assert(err)
 	defer f.Close()
-	yal.Assert(json.NewDecoder(f).Decode(c))
+	act.Assert(json.NewDecoder(f).Decode(c))
 	rev, _ := strconv.Atoi(_G_REVS)
 	if rev > c.Rev {
 		os.Remove(cfg)
@@ -46,10 +46,10 @@ func (c *config) Load() (err error) {
 }
 
 func (c config) Save() (err error) {
-	defer yal.Catch(&err)
+	defer act.Catch(&err)
 	f, err := os.Create(filepath.Join(c.dir, "config.json"))
-	yal.Assert(err)
-	defer func() { yal.Assert(f.Close()) }()
+	act.Assert(err)
+	defer func() { act.Assert(f.Close()) }()
 	c.Rev, _ = strconv.Atoi(_G_REVS)
 	return json.NewEncoder(f).Encode(c)
 }

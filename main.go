@@ -17,7 +17,7 @@ import (
 	"sync"
 	"time"
 
-	"go.xrfang.cn/yal"
+	"go.xrfang.cn/act"
 )
 
 //go:embed resources/*
@@ -60,7 +60,7 @@ func main() {
 	var changed time.Time
 	var mx sync.Mutex
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		defer yal.Catch(func(err error) error {
+		defer act.Catch(func(err error) error {
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
@@ -86,17 +86,17 @@ func main() {
 			switch r.URL.Path {
 			case "/main.css":
 				f, err := os.Open(filepath.Join(cf.dir, cf.MainCSS))
-				yal.Assert(err)
+				act.Assert(err)
 				defer f.Close()
 				_, err = io.Copy(w, f)
-				yal.Assert(err)
+				act.Assert(err)
 				return
 			case "/code.css":
 				f, err := os.Open(filepath.Join(cf.dir, cf.CodeCSS))
-				yal.Assert(err)
+				act.Assert(err)
 				defer f.Close()
 				_, err = io.Copy(w, f)
-				yal.Assert(err)
+				act.Assert(err)
 				return
 			}
 		case ".js":
@@ -112,7 +112,7 @@ func main() {
 		if err == nil {
 			defer f.Close()
 			_, err = io.Copy(w, f)
-			yal.Assert(err)
+			act.Assert(err)
 			return
 		}
 		if !os.IsNotExist(err) {
@@ -129,10 +129,10 @@ func main() {
 		}
 		defer f.Close()
 		_, err = io.Copy(w, f)
-		yal.Assert(err)
+		act.Assert(err)
 	})
 	http.HandleFunc("/render", func(w http.ResponseWriter, r *http.Request) {
-		defer yal.Catch(func(err error) error {
+		defer act.Catch(func(err error) error {
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
@@ -144,7 +144,7 @@ func main() {
 			mx.Lock()
 			defer mx.Unlock()
 			st, err := os.Stat(fn)
-			yal.Assert(err)
+			act.Assert(err)
 			_, refresh := r.URL.Query()["refresh"]
 			if refresh && !st.ModTime().After(changed) {
 				return false
@@ -157,7 +157,7 @@ func main() {
 			return
 		}
 		res, err := RenderMD(fn)
-		yal.Assert(err)
+		act.Assert(err)
 		var fs []map[string]interface{}
 		for i, f := range col.Files {
 			dir := filepath.Dir(f)
@@ -174,10 +174,10 @@ func main() {
 		}
 		res["col"] = fs
 		w.Header().Set("Content-Type", "application/json")
-		yal.Assert(json.NewEncoder(w).Encode(res))
+		act.Assert(json.NewEncoder(w).Encode(res))
 	})
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", cf.Port))
-	yal.Assert(err)
+	act.Assert(err)
 	portInUse := ln.Addr().(*net.TCPAddr).Port
 	url := fmt.Sprintf("http://127.0.0.1:%d/", portInUse)
 	fmt.Println("showing document at:", url)

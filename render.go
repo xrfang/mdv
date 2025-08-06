@@ -10,13 +10,13 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/renderer/html"
-	"go.xrfang.cn/yal"
+	"go.xrfang.cn/act"
 )
 
 func RenderMD(fn string) (res map[string]interface{}, err error) {
-	defer yal.Catch(&err)
+	defer act.Catch(&err)
 	src, err := os.ReadFile(fn)
-	yal.Assert(err)
+	act.Assert(err)
 	base := filepath.Base(fn)
 	ext := filepath.Ext(base)
 	base = base[:len(base)-len(ext)]
@@ -31,7 +31,7 @@ func RenderMD(fn string) (res map[string]interface{}, err error) {
 	)
 	var buf bytes.Buffer
 	toc, err := render(src, &buf)
-	yal.Assert(err)
+	act.Assert(err)
 	return map[string]interface{}{
 		"toc":   toc,
 		"title": base,

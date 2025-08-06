@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"go.xrfang.cn/yal"
+	"go.xrfang.cn/act"
 )
 
 // open opens the specified URL in the default browser of the user.
@@ -36,12 +36,12 @@ func extract(root fs.FS, fn string) {
 	if err != nil {
 		func() {
 			w, err := os.Create(fp)
-			yal.Assert(err)
-			defer func() { yal.Assert(w.Close()) }()
+			act.Assert(err)
+			defer func() { act.Assert(w.Close()) }()
 			f, _ := root.Open(filepath.Join(".", fn))
 			defer f.Close()
 			_, err = io.Copy(w, f)
-			yal.Assert(err)
+			act.Assert(err)
 		}()
 	}
 }
